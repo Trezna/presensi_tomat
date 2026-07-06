@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "tanggal": "2026-07-05",
+    "judul": "Penyiraman & Pengecekan Sensor",
+    "jam_mulai": "07:00",
+    "jam_selesai": "08:00",
+    "keterangan": "Penyiraman rutin semua petak, cek sensor kelembapan"
+  },
+  {
+    "id": 2,
+    "tanggal": "2026-07-05",
+    "judul": "Pemupukan Petak A",
+    "jam_mulai": "09:00",
+    "jam_selesai": "11:00",
+    "keterangan": "Aplikasi pupuk NPK untuk petak A"
+  },
+  {
+    "id": 3,
+    "tanggal": "2026-07-07",
+    "judul": "Penyiraman Pagi",
+    "jam_mulai": "07:00",
+    "jam_selesai": "08:00",
+    "keterangan": "Penyiraman rutin petak A dan B"
+  },
+  {
+    "id": 4,
+    "tanggal": "2026-07-07",
+    "judul": "Pengendalian Hama",
+    "jam_mulai": "09:00",
+    "jam_selesai": "10:30",
+    "keterangan": "Penyemprotan insektisida organik di petak B"
+  },
+  {
+    "id": 5,
+    "tanggal": "2026-07-08",
+    "judul": "Kalibrasi Sensor IoT",
+    "jam_mulai": "08:00",
+    "jam_selesai": "09:00",
+    "keterangan": "Kalibrasi ulang sensor kelembapan tanah di petak B"
+  },
+  {
+    "id": 6,
+    "tanggal": "2026-07-09",
+    "judul": "Penyiraman & Inspeksi",
+    "jam_mulai": "07:00",
+    "jam_selesai": "08:30",
+    "keterangan": "Penyiraman + inspeksi kondisi tanaman tomat"
+  },
+  {
+    "id": 7,
+    "tanggal": "2026-07-10",
+    "judul": "Pemanenan Tomat Siap Petik",
+    "jam_mulai": "06:30",
+    "jam_selesai": "09:00",
+    "keterangan": "Panen tomat matang di petak A, kemas untuk pengiriman"
+  },
+  {
+    "id": 8,
+    "tanggal": "2026-07-11",
+    "judul": "Perawatan Drip Irrigation",
+    "jam_mulai": "08:00",
+    "jam_selesai": "10:00",
+    "keterangan": "Pembersihan dan pengecekan sistem irigasi tetes"
+  }
+]

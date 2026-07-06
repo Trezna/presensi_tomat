@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "nama_petugas": "Tres",
+    "tanggal": "2026-07-05",
+    "jam": "16:05",
+    "foto_url": "http://10.0.2.2:8000/uploads/presensi_1_20260705160503.jpg",
+    "status": "Telat"
+  },
+  {
+    "id": 2,
+    "nama_petugas": "Joko Prakoso",
+    "tanggal": "2026-07-05",
+    "jam": "18:22",
+    "foto_url": "http://10.0.2.2:8000/uploads/presensi_2_20260705182200.jpg",
+    "status": "Telat",
+    "id_petugas": 3
+  },
+  {
+    "id": 3,
+    "nama_petugas": "Budi Santoso",
+    "tanggal": "2026-07-05",
+    "jam": "18:26",
+    "foto_url": "http://10.0.2.2:8000/uploads/presensi_3_20260705182644.jpg",
+    "status": "Telat",
+    "id_petugas": 1
+  },
+  {
+    "id": 4,
+    "nama_petugas": "Sari Dewi",
+    "tanggal": "2026-07-05",
+    "jam": "18:29",
+    "foto_url": "http://10.0.2.2:8000/uploads/presensi_4_20260705182932.jpg",
+    "status": "Telat",
+    "id_petugas": 2
+  }
+]
