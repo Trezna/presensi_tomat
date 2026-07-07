@@ -23,8 +23,6 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-
   @override
   void initState() {
     super.initState();
@@ -74,10 +72,8 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
 
   Future<void> _tambahJadwal() async {
     final judulCtrl = TextEditingController();
-    final jamMulaiCtrl = TextEditingController(
-        text: '07:00');
-    final jamSelesaiCtrl = TextEditingController(
-        text: '08:00');
+    final jamMulaiCtrl = TextEditingController(text: '07:00');
+    final jamSelesaiCtrl = TextEditingController(text: '08:00');
     final keteranganCtrl = TextEditingController();
     DateTime tanggalDipilih = _selectedDay;
 
@@ -96,8 +92,9 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.calendar_today),
                   title: const Text('Tanggal'),
-                  subtitle: Text(DateFormat('d MMMM yyyy', 'id_ID')
-                      .format(tanggalDipilih)),
+                  subtitle: Text(
+                    DateFormat('d MMMM yyyy', 'id_ID').format(tanggalDipilih),
+                  ),
                   onTap: () async {
                     final picked = await showDatePicker(
                       context: ctx,
@@ -184,8 +181,7 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
     if (judul.isEmpty || jamMulai.isEmpty || jamSelesai.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Judul dan jam wajib diisi')),
+        const SnackBar(content: Text('Judul dan jam wajib diisi')),
       );
       return;
     }
@@ -214,8 +210,7 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Gagal: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('Gagal: $e'), backgroundColor: Colors.red),
       );
     }
   }
@@ -255,8 +250,7 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Gagal: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('Gagal: $e'), backgroundColor: Colors.red),
       );
     }
   }
@@ -288,155 +282,161 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.cloud_off_outlined,
-                            size: 72, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
-                        Text(
-                          _errorMessage!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.grey.shade700, height: 1.5),
-                        ),
-                        const SizedBox(height: 24),
-                        FilledButton.icon(
-                          onPressed: _fetchJadwal,
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Coba Lagi'),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Column(
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // ── Kalender ──────────────────────────────────────────
-                    TableCalendar<JadwalKerja>(
-                      locale: 'id_ID',
-                      firstDay: DateTime.utc(2026, 1, 1),
-                      lastDay: DateTime.utc(2027, 12, 31),
-                      focusedDay: _focusedDay,
-                      calendarFormat: _calendarFormat,
-                      selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay, day),
-                      eventLoader: _getJadwalForDay,
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      },
-                      onFormatChanged: (format) {
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      },
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
-                      calendarStyle: CalendarStyle(
-                        markerDecoration: BoxDecoration(
-                          color: colorScheme.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        selectedDecoration: BoxDecoration(
-                          color: colorScheme.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        todayDecoration: BoxDecoration(
-                          color: colorScheme.primary.withAlpha(80),
-                          shape: BoxShape.circle,
-                        ),
-                        todayTextStyle:
-                            TextStyle(color: colorScheme.primary),
-                      ),
-                      headerStyle: HeaderStyle(
-                        formatButtonDecoration: BoxDecoration(
-                          color: colorScheme.primary.withAlpha(20),
-                          border: Border.all(color: colorScheme.primary),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        formatButtonTextStyle:
-                            TextStyle(color: colorScheme.primary),
-                        titleCentered: true,
+                    Icon(
+                      Icons.cloud_off_outlined,
+                      size: 72,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      _errorMessage!,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        height: 1.5,
                       ),
                     ),
-                    const Divider(height: 1),
-                    // ── Header tanggal terpilih ────────────────────────
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      child: Row(
-                        children: [
-                          Icon(Icons.event_note,
-                              size: 18, color: colorScheme.primary),
-                          const SizedBox(width: 8),
-                          Text(
-                            DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-                                .format(_selectedDay),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            '${jadwalTerpilih.length} jadwal',
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey.shade600),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // ── List jadwal ───────────────────────────────────────
-                    Expanded(
-                      child: jadwalTerpilih.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.event_busy,
-                                      size: 60,
-                                      color: Colors.grey.shade400),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'Tidak ada jadwal\ndi tanggal ini',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 15),
-                                  ),
-                                  if (widget.isAdmin) ...[
-                                    const SizedBox(height: 16),
-                                    TextButton.icon(
-                                      onPressed: _tambahJadwal,
-                                      icon: const Icon(Icons.add),
-                                      label: const Text('Tambah Jadwal'),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            )
-                          : RefreshIndicator(
-                              onRefresh: _fetchJadwal,
-                              child: ListView.builder(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                itemCount: jadwalTerpilih.length,
-                                itemBuilder: (context, index) {
-                                  final jadwal = jadwalTerpilih[index];
-                                  return _buildJadwalCard(jadwal);
-                                },
-                              ),
-                            ),
+                    const SizedBox(height: 24),
+                    FilledButton.icon(
+                      onPressed: _fetchJadwal,
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Coba Lagi'),
                     ),
                   ],
                 ),
+              ),
+            )
+          : Column(
+              children: [
+                // ── Kalender ──────────────────────────────────────────
+                TableCalendar<JadwalKerja>(
+                  locale: 'id_ID',
+                  firstDay: DateTime.utc(2026, 1, 1),
+                  lastDay: DateTime.utc(2027, 12, 31),
+                  focusedDay: _focusedDay,
+                  calendarFormat: CalendarFormat.month,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  eventLoader: _getJadwalForDay,
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  },
+                  onPageChanged: (focusedDay) {
+                    _focusedDay = focusedDay;
+                  },
+                  calendarStyle: CalendarStyle(
+                    markerDecoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    todayDecoration: BoxDecoration(
+                      color: colorScheme.primary.withAlpha(80),
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: TextStyle(color: colorScheme.primary),
+                  ),
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                  ),
+                ),
+                const Divider(height: 1),
+                // ── Header tanggal terpilih ────────────────────────
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.event_note,
+                        size: 18,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        DateFormat(
+                          'EEEE, d MMMM yyyy',
+                          'id_ID',
+                        ).format(_selectedDay),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${jadwalTerpilih.length} jadwal',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // ── List jadwal ───────────────────────────────────────
+                Expanded(
+                  child: jadwalTerpilih.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.event_busy,
+                                size: 60,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'Tidak ada jadwal\ndi tanggal ini',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              if (widget.isAdmin) ...[
+                                const SizedBox(height: 16),
+                                TextButton.icon(
+                                  onPressed: _tambahJadwal,
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Tambah Jadwal'),
+                                ),
+                              ],
+                            ],
+                          ),
+                        )
+                      : RefreshIndicator(
+                          onRefresh: _fetchJadwal,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                            itemCount: jadwalTerpilih.length,
+                            itemBuilder: (context, index) {
+                              final jadwal = jadwalTerpilih[index];
+                              return _buildJadwalCard(jadwal);
+                            },
+                          ),
+                        ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -492,14 +492,18 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
                   Text(
                     jadwal.judul,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
                   if (jadwal.keterangan.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
                       jadwal.keterangan,
                       style: TextStyle(
-                          color: Colors.grey.shade600, fontSize: 13),
+                        color: Colors.grey.shade600,
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ],
@@ -508,8 +512,11 @@ class _JadwalKerjaScreenState extends State<JadwalKerjaScreen> {
             // Tombol hapus (hanya mode admin)
             if (widget.isAdmin)
               IconButton(
-                icon: const Icon(Icons.delete_outline,
-                    color: Colors.red, size: 20),
+                icon: const Icon(
+                  Icons.delete_outline,
+                  color: Colors.red,
+                  size: 20,
+                ),
                 onPressed: () => _hapusJadwal(jadwal),
                 tooltip: 'Hapus jadwal',
               ),

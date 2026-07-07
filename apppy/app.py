@@ -17,6 +17,8 @@ Endpoint:
   POST   /api/login                 (JSON: username, password)
   GET    /api/petugas               (list semua petugas tanpa password)
   POST   /api/petugas               (JSON: username, password, nama, role?)
+  PUT    /api/petugas/<id>          (JSON: nama?, role?, password?)
+  DELETE /api/petugas/<id>
   GET    /api/petugas/<id>
   POST   /api/petugas/<id>/foto     (multipart: foto)
   GET    /api/jadwal                (?tanggal=YYYY-MM-DD opsional)
@@ -479,6 +481,45 @@ def get_petugas(petugas_id):
     return jsonify(p.to_dict()), 200
 
 
+@app.route("/api/petugas/<int:petugas_id>", methods=["PUT"])
+def put_petugas(petugas_id):
+    """Edit data petugas (nama, role, password opsional) — hanya untuk admin."""
+    p = Petugas.query.get(petugas_id)
+    if p is None:
+        return jsonify({"error": "Petugas tidak ditemukan"}), 404
+
+    body = request.get_json() or {}
+    nama = (body.get("nama") or "").strip()
+    role = (body.get("role") or "").strip()
+    password = (body.get("password") or "").strip()  # opsional, boleh kosong
+
+    if nama:
+        p.nama = nama
+    if role in ("admin", "petugas"):
+        p.role = role
+    if password:
+        p.password = generate_password_hash(password)
+
+    db.session.commit()
+    return jsonify(p.to_dict()), 200
+
+
+@app.route("/api/petugas/<int:petugas_id>", methods=["DELETE"])
+def delete_petugas(petugas_id):
+    """Hapus petugas — histori presensi tetap ada, id_petugas jadi NULL."""
+    p = Petugas.query.get(petugas_id)
+    if p is None:
+        return jsonify({"error": "Petugas tidak ditemukan"}), 404
+
+    # Lepas keterkaitan ke presensi lama (histori TETAP ada — nama_petugas
+    # sudah tersimpan sebagai teks terpisah — cuma id_petugas jadi NULL)
+    Presensi.query.filter_by(id_petugas=petugas_id).update({"id_petugas": None})
+
+    db.session.delete(p)
+    db.session.commit()
+    return jsonify({"message": "Petugas berhasil dihapus"}), 200
+
+
 @app.route("/api/petugas/<int:petugas_id>/foto", methods=["POST"])
 def upload_foto_profil(petugas_id):
     foto = request.files.get("foto")
@@ -575,6 +616,8 @@ def index():
             "POST /api/login",
             "GET  /api/petugas",
             "POST /api/petugas",
+            "PUT  /api/petugas/<id>",
+            "DELETE /api/petugas/<id>",
             "GET  /api/petugas/<id>",
             "POST /api/petugas/<id>/foto",
             "GET  /api/jadwal (?tanggal=)",

@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
 
       // Admin tidak perlu statistik presensi (itu bukan hal yang relevan
-      // buat akun admin) — skip fetch riwayat sama sekali buat hemat request.
+      // buat akun admin) â€” skip fetch riwayat sama sekali buat hemat request.
       if (petugas.role == 'admin') {
         setState(() {
           _petugas = petugas;
@@ -179,12 +179,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   /// Dipanggil otomatis kalau sesi ternyata null/invalid (bukan aksi manual
-  /// user). TIDAK menampilkan dialog konfirmasi apa pun — langsung redirect
+  /// user). TIDAK menampilkan dialog konfirmasi apa pun â€” langsung redirect
   /// diam-diam ke halaman Login.
   Future<void> _redirectLogin() async {
     await _authService.hapusSesi();
     if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/landing', (route) => false);
   }
 
   /// Dipanggil HANYA dari tombol "Logout" yang ditekan user secara manual.
@@ -213,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     await _authService.hapusSesi();
     if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/landing', (route) => false);
   }
 
   String _formatTanggal(String tanggal) {
@@ -248,7 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    // ── Header profil ──────────────────────────────────
+                    // â”€â”€ Header profil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -403,7 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
 
-                    // ── Statistik presensi bulan ini (khusus petugas) ──
+                    // â”€â”€ Statistik presensi bulan ini (khusus petugas) â”€â”€
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -452,7 +452,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const SizedBox(height: 24),
                           ],
 
-                          // ── Info tambahan ────────────────────────────
+                          // â”€â”€ Info tambahan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                           Card(
                             child: Padding(
                               padding: const EdgeInsets.all(4),
@@ -494,7 +494,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           const SizedBox(height: 16),
 
-                          // ── Tombol Logout ────────────────────────────
+                          // â”€â”€ Tombol Logout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton.icon(
@@ -518,7 +518,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           const SizedBox(height: 16),
 
-                          // ── Info app (kecil di bawah) ─────────────
+                          // â”€â”€ Info app (kecil di bawah) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                           Center(
                             child: Text(
                               'Presensi Kebun Tomat v1.0.0 (UAS)',
@@ -575,3 +575,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+

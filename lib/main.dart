@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'screens/main_navigation_screen.dart';
@@ -7,29 +8,25 @@ import 'screens/presensi_screen.dart';
 import 'screens/detail_presensi_screen.dart';
 import 'screens/landing_screen.dart';
 import 'screens/login_screen.dart';
-import 'services/auth_service.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Tahan splash native sampai frame pertama selesai dirender.
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   // Inisialisasi locale Indonesia untuk DateFormat dan TableCalendar
   await initializeDateFormatting('id_ID', null);
 
-  final sesi = await AuthService().getSesi();
-  String initialRoute;
-  if (sesi == null) {
-    initialRoute = '/landing';
-  } else if (sesi.role == 'admin') {
-    initialRoute = '/admin';
-  } else {
-    initialRoute = '/';
-  }
-
-  runApp(MyApp(initialRoute: initialRoute));
+  runApp(const MyApp());
+  // Lepas splash setelah frame pertama (LandingScreen) selesai dirender.
+  // Cek sesi dan redirect dilakukan di dalam LandingScreen itu sendiri.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    FlutterNativeSplash.remove();
+  });
 }
 
 class MyApp extends StatelessWidget {
-  final String initialRoute;
-  const MyApp({super.key, required this.initialRoute});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +42,9 @@ class MyApp extends StatelessWidget {
       brightness: Brightness.light,
     );
 
-    final TextTheme poppinsTextTheme =
-        GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme);
+    final TextTheme poppinsTextTheme = GoogleFonts.poppinsTextTheme(
+      ThemeData.light().textTheme,
+    );
 
     return MaterialApp(
       title: 'Presensi Kebun Tomat',
@@ -79,18 +77,18 @@ class MyApp extends StatelessWidget {
           ),
         ),
         filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
-            backgroundColor: primaryGreen,
-          ),
+          style: FilledButton.styleFrom(backgroundColor: primaryGreen),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: primaryGreen,
           unselectedItemColor: Colors.grey,
         ),
       ),
-      initialRoute: initialRoute,
+      // LandingScreen sebagai titik masuk tunggal — dia sendiri yang
+      // mengecek sesi dan meneruskan ke halaman yang tepat.
+      home: const LandingScreen(),
       routes: {
-        '/': (context) => const MainNavigationScreen(),
+        '/main': (context) => const MainNavigationScreen(),
         '/admin': (context) => const AdminNavigationScreen(),
         '/landing': (context) => const LandingScreen(),
         '/login': (context) => const LoginScreen(),

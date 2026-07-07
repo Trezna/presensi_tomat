@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/auth_service.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Cek sesi setelah frame pertama dirender supaya context Navigator sudah siap.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _cekSesi());
+  }
+
+  Future<void> _cekSesi() async {
+    final sesi = await AuthService().getSesi();
+    if (!mounted) return;
+
+    if (sesi == null) {
+      // Belum login — tampilkan landing page seperti biasa (tidak perlu navigasi)
+      return;
+    }
+
+    // Sudah login — langsung redirect ke halaman yang sesuai
+    if (sesi.role == 'admin') {
+      Navigator.pushReplacementNamed(context, '/admin');
+    } else {
+      Navigator.pushReplacementNamed(context, '/main');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

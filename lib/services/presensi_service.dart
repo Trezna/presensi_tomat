@@ -250,4 +250,46 @@ class PresensiService {
       rethrow;
     }
   }
+
+  /// Edit data petugas (admin). Password opsional — kirim string kosong
+  /// kalau tidak ingin mengubah password.
+  Future<Petugas> editPetugas({
+    required int id,
+    required String nama,
+    required String role,
+    String password = '',
+  }) async {
+    try {
+      final response = await http.put(
+        Uri.parse(Endpoints.petugas(id)),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'nama': nama,
+          'role': role,
+          if (password.isNotEmpty) 'password': password,
+        }),
+      );
+      if (response.statusCode == 200) {
+        return Petugas.fromJson(jsonDecode(response.body));
+      } else {
+        final body = jsonDecode(response.body);
+        throw Exception(body['error'] ?? 'Gagal update petugas: HTTP ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Terjadi kesalahan jaringan: $e');
+    }
+  }
+
+  /// Hapus petugas (admin).
+  Future<void> deletePetugas(int id) async {
+    try {
+      final response = await http.delete(Uri.parse(Endpoints.petugas(id)));
+      if (response.statusCode != 200) {
+        final body = jsonDecode(response.body);
+        throw Exception(body['error'] ?? 'Gagal hapus petugas: HTTP ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Terjadi kesalahan jaringan: $e');
+    }
+  }
 }

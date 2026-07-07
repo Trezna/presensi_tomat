@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (petugas.role == 'admin') {
         Navigator.pushNamedAndRemoveUntil(context, '/admin', (route) => false);
       } else {
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
     } catch (e) {
       if (!mounted) return;
